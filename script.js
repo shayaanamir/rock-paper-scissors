@@ -75,8 +75,7 @@ function playRound(compChoice, userChoice){
 
 function playGame(){
     let roundNo = 0;
-    while(roundNo < 5)
-    {
+
         console.log("Round %d:", roundNo+1);
 
         let userChoice = getHumanChoice();
@@ -88,7 +87,6 @@ function playGame(){
         console.log("Computer score: %d", compScore);
 
         roundNo++;
-    }
 
     if(userScore > compScore){
         console.log("Congratulations! You Win!");
