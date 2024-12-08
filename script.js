@@ -1,41 +1,72 @@
 let userScore = 0;
 let compScore = 0;
+const rockButton = document.querySelector("#rock");
+const paperButton = document.querySelector("#paper");
+const scissorsButton = document.querySelector("#scissors");
 
+const playerDisplay = document.querySelector("#Player > img");
+const compDisplay = document.querySelector("#Computer > img");
+
+const playerText = document.querySelector("#Player > h2");
+const compText = document.querySelector("#Computer > h2");
+
+const score = document.querySelector("#score");
+const result = document.querySelector("#result");
+
+
+rockButton.addEventListener("click", () =>{
+    playerDisplay.src = "images/rock.png";
+    blinkImage(playerDisplay);
+    playGame("Rock");
+});
+
+paperButton.addEventListener("click", () =>{
+    playerDisplay.src = "images/paper.png";
+    blinkImage(playerDisplay);
+    
+    playGame("Paper");
+});
+
+scissorsButton.addEventListener("click", ()=>{
+    playerDisplay.src = "images/scissors.png";
+    blinkImage(playerDisplay);
+    playGame("Scissors");
+});
+
+function blinkImage(imageSrc){
+    imageSrc.setAttribute("style", "filter: brightness(70%)");
+    setTimeout(() =>{
+        imageSrc.setAttribute("style", "filter: brightness(100%)");
+    }, 150);
+}
+
+function blinkText(text, colorValue){
+    text.style.color = colorValue;
+    setTimeout(() =>{
+            text.style.color = "aliceblue";
+    }, 1000);
+    
+}
 
 function getComputerChoice(){
     let n = Math.random();
 
-    if(n < 0.33){
+    if(n < 0.33){  
+        compDisplay.src = "images/rock.png";
+        blinkImage(compDisplay);
         return "Rock";
     }
     else if(n > 0.33 && n < 0.66){
+        compDisplay.src = "images/paper.png";
+        blinkImage(compDisplay);
         return "Paper";
     }
     else{
+        compDisplay.src = "images/scissors.png";
+        blinkImage(compDisplay);
         return "Scissors";
     }
 }
-
-function getHumanChoice(){
-    console.log("Enter your choice:\nRock\nPaper\nScissors\n");
-    let userChoice = prompt("choice: ");
-    userChoice = userChoice.toUpperCase();
-
-    if(userChoice == "ROCK"){
-        return "Rock";
-    }
-    else if(userChoice == "PAPER"){
-        return "Paper";
-    }
-    else if(userChoice == "SCISSORS" || userChoice =="SCISSOR"){
-        return "Scissors";
-    }
-    else{
-        console.log("Invalid Choice! Try again!");
-        return getHumanChoice();
-    }
-}
-
 
 
 
@@ -43,64 +74,73 @@ function getHumanChoice(){
 function playRound(compChoice, userChoice){
 
     if(compChoice == "Rock" && userChoice=="Paper"){
-        console.log("YOU WIN! %s beats %s", userChoice, compChoice);
+        result.textContent = "YOU WIN!";
+        blinkText(playerText, "lightgreen");
+        blinkText(compText, "red");
         userScore++;
     }
     else if(compChoice == "Paper" && userChoice=="Scissors"){
-        console.log("YOU WIN! %s beats %s", userChoice, compChoice);
+        result.textContent = "YOU WIN!";
+        blinkText(playerText, "lightgreen");
+        blinkText(compText, "red");
         userScore++;
     }
     else if(compChoice=="Scissors" && userChoice=="Rock"){
-        console.log("YOU WIN! %s beats %s", userChoice, compChoice);
+        result.textContent = "YOU WIN!"; 
+        blinkText(playerText, "lightgreen");
+        blinkText(compText, "red");
         userScore++;
     }
     else if(compChoice == "Paper" && userChoice=="Rock"){
-        console.log("YOU LOSE! %s beats %s", compChoice, userChoice);
+        result.textContent = "YOU LOSE!";
+        blinkText(compText, "lightgreen");
+        blinkText(playerText, "red");
         compScore++;
     }
     else if(compChoice == "Scissors" && userChoice=="Paper"){
-        console.log("YOU LOSE! %s beats %s", compChoice, userChoice);
+        result.textContent = "YOU LOSE!";
+        blinkText(compText, "lightgreen");
+        blinkText(playerText, "red");
         compScore++;
     }
     else if(compChoice == "Rock" && userChoice=="Scissors"){
-        console.log("YOU LOSE! %s beats %s", compChoice, userChoice);
+        result.textContent = "YOU LOSE!";
+        blinkText(compText, "lightgreen");
+        blinkText(playerText, "red");
         compScore++;
     }
     else if(compChoice == userChoice)
     {
-        console.log("TIE! both chose %s", userChoice);
-    } 
+        result.textContent = "TIE!";
+    }
+
+    
 }
 
 
-function playGame(){
-    let roundNo = 0;
+function playGame(userChoice){
 
-        console.log("Round %d:", roundNo+1);
+    let compChoice = getComputerChoice();
+    playRound(compChoice, userChoice);
+    score.textContent = userScore + " : " + compScore ;
 
-        let userChoice = getHumanChoice();
-        let compChoice = getComputerChoice();
-        console.log("Computer chose: %s", compChoice);
+    if(userScore >=5 || compScore >= 5){
+        if(userScore > compScore){
+            result.textContent = "CONGRATULATIONS! YOU WIN!";
+            result.style.color = "lightgreen";
+        }
+        else{
+            result.textContent = "YOU LOSE! BETTER LUCK NEXT TIME!";
+            result.style.color = "red";
+        }
 
-        playRound(compChoice, userChoice);
-        console.log("User score: %d", userScore);
-        console.log("Computer score: %d", compScore);
-
-        roundNo++;
-
-    if(userScore > compScore){
-        console.log("Congratulations! You Win!");
+        userScore = 0;
+        compScore = 0;
+        return;
     }
-    else if(compScore > userScore)
-    {
-        console.log("You Lose! Better luck next time.");
-    }
-    else{
-        console.log("TIE!");
-    }
-
+    result.style.color = "aliceblue";
 }
 
-playGame();
+
 
 
